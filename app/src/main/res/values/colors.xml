@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primary">@color/p500</color>
+    <color name="primary_dark">@color/p700</color>
+    <color name="primary_accent">@color/p300</color>
+    <color name="windowBackground">@color/g50</color>
+    <color name="boxBackground">@color/white_primary</color>
+
+    <color name="text_primary">@color/black_87</color>
+    <color name="text_secondary">@color/black_54</color>
+    <color name="text_hint">@color/black_26</color>
+
+    <!-- Black and White -->
+    <color name="white_primary">#FFFFFF</color>
+    <color name="white_primary_87">#DAFFFFFF</color>
+    <color name="white_primary_54">#79FFFFFF</color>
+    <color name="black_87">#DD000000</color>
+    <color name="black_54">#79000000</color>
+    <color name="black_26">#3A000000</color>
+    <color name="black_12">#1B000000</color>
+
+    <!-- Grey -->
+    <color name="g50">#FAFAFA</color>
+
+    <!-- Primary -->
+    <color name="p50">#E3F2FD</color>
+    <color name="p100">#BBDEFB</color>
+    <color name="p200">#90CAF9</color>
+    <color name="p300">#64B5F6</color>
+    <color name="p400">#42A5F5</color>
+    <color name="p500">#2196F3</color>
+    <color name="p600">#1E88E5</color>
+    <color name="p700">#1976D2</color>
+    <color name="p800">#1565C0</color>
+    <color name="p900">#0D47A1</color>
+    <color name="A100">#82B1FF</color>
+    <color name="A200">#448AFF</color>
+    <color name="A400">#2979FF</color>
+    <color name="A700">#2962FF</color>
+
+    <!-- Secondary -->
+
 </resources>
