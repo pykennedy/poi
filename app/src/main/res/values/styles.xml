@@ -20,20 +20,17 @@
         <item name="android:textSize">20sp</item>
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="robotoFont">Regular</item>
     </style>
 
     <style name="Category">
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">20sp</item>
-        <item name="robotoFont">Regular</item>
     </style>
 
     <style name="Description">
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:ellipsize">end</item>
-        <item name="robotoFont">Regular</item>
     </style>
 
 </resources>

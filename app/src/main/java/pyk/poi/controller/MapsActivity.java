@@ -1,4 +1,4 @@
-package pyk.poi.Controller;
+package pyk.poi.controller;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
