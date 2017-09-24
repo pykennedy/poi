@@ -21,6 +21,8 @@
 
     <!-- Grey -->
     <color name="g50">#FAFAFA</color>
+    <color name="g100">#F5F5F5</color>
+    <color name="g300">#E0E0E0</color>
 
     <!-- Primary -->
     <color name="p50">#E3F2FD</color>

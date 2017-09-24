@@ -1,4 +1,32 @@
 <resources>
     <string name="app_name">poi</string>
     <string name="title_activity_maps">POI</string>
+
+    <string-array name="list_categories">
+        <item>All:</item>
+        <item>Arcades:</item>
+        <item>Bars:</item>
+        <item>Cafes:</item>
+        <item>Hotels:</item>
+        <item>Houses:</item>
+        <item>Parking:</item>
+        <item>Restaurants:</item>
+        <item>Sports Areas:</item>
+        <item>Stores:</item>
+        <item>Tourist Attractions:</item>
+    </string-array>
+
+    <string-array name="categories">
+        <item>Category:</item>
+        <item>Arcade</item>
+        <item>Bar</item>
+        <item>Cafe</item>
+        <item>Hotel</item>
+        <item>House</item>
+        <item>Parking</item>
+        <item>Restaurant</item>
+        <item>Sports Area</item>
+        <item>Store</item>
+        <item>Tourist Attraction</item>
+    </string-array>
 </resources>

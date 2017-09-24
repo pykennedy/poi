@@ -13,53 +13,39 @@
               android:layout_height="match_parent"
               android:layout_marginBottom="?attr/actionBarSize"
               android:elevation="0dp"
-              tools:context="pyk.poi.controller.MapsActivity"/>
+              tools:context="pyk.poi.controller.activity.MapsActivity"/>
 
     <FrameLayout
+        android:id="@+id/popupWindow"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/popupWindow"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:orientation="vertical">
-
-            <View
-                android:id="@+id/window_bar"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/primary"
-                android:elevation="2dp"/>
-
-
-            <View
-                android:id="@+id/window"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/windowBackground"
-                android:elevation="0dp"/>
-        </LinearLayout>
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:orientation="vertical">
 
         <View
-            android:id="@+id/top_shadow"
+            android:id="@+id/window_bar"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:background="@drawable/top_shadow"/>
+            android:layout_height="2dp"
+            android:background="@color/primary"
+            android:elevation="2dp"/>
+
+        <View
+            android:id="@+id/window"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/windowBackground"
+            android:elevation="0dp"/>
     </FrameLayout>
 
     <View
-        android:id="@+id/delete_me"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="250dp"
-        android:background="@color/boxBackground"
-        android:elevation="2dp"/>
+        android:id="@+id/top_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:background="@drawable/top_shadow"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_maps_activity"

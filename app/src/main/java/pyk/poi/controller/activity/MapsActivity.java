@@ -1,4 +1,4 @@
-package pyk.poi.controller;
+package pyk.poi.controller.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import pyk.poi.R;
+import pyk.poi.controller.fragment.DetailsFragment;
+import pyk.poi.controller.fragment.ListFragment;
+import pyk.poi.controller.fragment.SaveFragment;
+import pyk.poi.controller.fragment.SearchFragment;
 
 public class MapsActivity extends AppCompatActivity
     implements OnMapReadyCallback, View.OnClickListener {
@@ -43,18 +47,39 @@ public class MapsActivity extends AppCompatActivity
     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
         .findFragmentById(R.id.map);
     mapFragment.getMapAsync(this);
+  
+    DetailsFragment detailsFragment = new DetailsFragment();
+    getSupportFragmentManager()
+        .beginTransaction()
+        .replace(R.id.popupWindow, detailsFragment)
+        .commit();
   }
   
   @Override
   public void onClick(View v) {
     switch(v.getId()) {
       case R.id.iv_list_button:
+        ListFragment listFragment = new ListFragment();
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.popupWindow, listFragment)
+            .commit();
         Toast.makeText(this, "List", Toast.LENGTH_SHORT).show();
         break;
       case R.id.iv_add_button:
+        SaveFragment saveFragment = new SaveFragment();
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.popupWindow, saveFragment)
+            .commit();
         Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
         break;
       case R.id.iv_search_button:
+        SearchFragment searchFragment = new SearchFragment();
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.popupWindow, searchFragment)
+            .commit();
         Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
         break;
       default:
