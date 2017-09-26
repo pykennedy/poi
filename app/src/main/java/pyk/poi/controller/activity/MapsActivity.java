@@ -1,11 +1,13 @@
 package pyk.poi.controller.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,13 +17,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import pyk.poi.R;
-import pyk.poi.controller.fragment.DetailsFragment;
 import pyk.poi.controller.fragment.ListFragment;
 import pyk.poi.controller.fragment.SaveFragment;
 import pyk.poi.controller.fragment.SearchFragment;
+import pyk.poi.view.animator.Animator;
 
 public class MapsActivity extends AppCompatActivity
     implements OnMapReadyCallback, View.OnClickListener {
+  
+  private static View popupWindow;
   
   private GoogleMap map;
   private Toolbar   toolbar;
@@ -29,10 +33,15 @@ public class MapsActivity extends AppCompatActivity
   private ImageView add;
   private ImageView search;
   
+  private        boolean windowIsOpen;
+  private static int     defaultHeight;
+  
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maps);
+    
+    popupWindow = findViewById(R.id.popupWindow);
     
     toolbar = (Toolbar) findViewById(R.id.tb_maps_activity);
     setSupportActionBar(toolbar);
@@ -48,62 +57,70 @@ public class MapsActivity extends AppCompatActivity
         .findFragmentById(R.id.map);
     mapFragment.getMapAsync(this);
   
-    DetailsFragment detailsFragment = new DetailsFragment();
-    getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.popupWindow, detailsFragment)
-        .commit();
+    ViewTreeObserver viewTreeObserver = popupWindow.getViewTreeObserver();
+    if (viewTreeObserver.isAlive()) {
+      viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          if (defaultHeight == 0) {
+            defaultHeight = popupWindow.getHeight();
+            popupWindow.setVisibility(View.GONE);
+            windowIsOpen = false;
+          }
+        }
+      });
+    }
   }
   
   @Override
   public void onClick(View v) {
-    switch(v.getId()) {
+    switch (v.getId()) {
       case R.id.iv_list_button:
-        ListFragment listFragment = new ListFragment();
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.popupWindow, listFragment)
-            .commit();
-        Toast.makeText(this, "List", Toast.LENGTH_SHORT).show();
+        final ListFragment listFragment = new ListFragment();
+        replaceFragment(listFragment);
         break;
       case R.id.iv_add_button:
         SaveFragment saveFragment = new SaveFragment();
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.popupWindow, saveFragment)
-            .commit();
-        Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
+        replaceFragment(saveFragment);
         break;
       case R.id.iv_search_button:
         SearchFragment searchFragment = new SearchFragment();
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.popupWindow, searchFragment)
-            .commit();
-        Toast.makeText(this, "Search", Toast.LENGTH_SHORT).show();
+        replaceFragment(searchFragment);
         break;
       default:
         break;
     }
   }
   
-  
-  /**
-   * Manipulates the map once available.
-   * This callback is triggered when the map is ready to be used.
-   * This is where we can add markers or lines, add listeners or move the camera. In this case,
-   * we just add a marker near Sydney, Australia.
-   * If Google Play services is not installed on the device, the user will be prompted to install
-   * it inside the SupportMapFragment. This method will only be triggered once the user has
-   * installed Google Play services and returned to the app.
-   */
   @Override
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
     
-    // Add a marker in Sydney and move the camera
     LatLng sydney = new LatLng(-34, 151);
     map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
     map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+  }
+  
+  private void replaceFragment(final Fragment f) {
+    if (windowIsOpen) { // wait to start expanding until window finishes collapsing
+      Animator.windowDown(popupWindow);
+      Handler handler = new Handler();
+      handler.postDelayed(new Runnable() {
+        public void run() {
+          getSupportFragmentManager()
+              .beginTransaction()
+              .replace(R.id.popupWindow, f)
+              .commit();
+          Animator.windowUp(popupWindow, defaultHeight);
+        }
+      }, 350);
+    } else {
+      getSupportFragmentManager()
+          .beginTransaction()
+          .replace(R.id.popupWindow, f)
+          .commit();
+      Animator.windowUp(popupWindow, defaultHeight);
+    }
+    windowIsOpen = true;
   }
 }

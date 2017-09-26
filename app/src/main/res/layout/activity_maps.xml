@@ -21,7 +21,8 @@
         android:layout_height="400dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <View
             android:id="@+id/window_bar"
