@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">@color/p500</color>
-    <color name="primary_dark">@color/p700</color>
+    <color name="primary">@color/p600</color>
+    <color name="primary_dark">@color/p800</color>
     <color name="primary_accent">@color/p300</color>
     <color name="windowBackground">@color/g50</color>
     <color name="boxBackground">@color/white_primary</color>
@@ -21,6 +21,8 @@
 
     <!-- Grey -->
     <color name="g50">#FAFAFA</color>
+    <color name="g100">#F5F5F5</color>
+    <color name="g300">#E0E0E0</color>
 
     <!-- Primary -->
     <color name="p50">#E3F2FD</color>
