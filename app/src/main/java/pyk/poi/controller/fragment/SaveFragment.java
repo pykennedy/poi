@@ -8,11 +8,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.Marker;
+
 import pyk.poi.R;
+import pyk.poi.controller.activity.MapsActivity;
 
 public class SaveFragment extends Fragment {
   View    view;
   Spinner category;
+  Marker marker;
+  
+  public SaveFragment() {
+    super();
+    this.marker = MapsActivity.currentMarker;
+  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,

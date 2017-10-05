@@ -32,8 +32,10 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -57,11 +59,12 @@ public class MapsActivity extends AppCompatActivity
   
   private        boolean windowIsOpen;
   private static int     defaultHeight;
+  private        boolean intentToAdd;
   
   public static LatLng           user;
+  public static Marker           currentMarker;
   private       LocationCallback locationCallback;
   FusedLocationProviderClient fusedLocationProviderClient;
-  LocationRequest             locationRequest;
   boolean accessGranted = false;
   
   public static final  int STANDARD_CAMERA_SPEED = 400;
@@ -69,8 +72,6 @@ public class MapsActivity extends AppCompatActivity
   private static final int STANDARD_ZOOM         = 17;
   private static final int FAR_ZOOM              = 15;
   private static final int NEAR_ZOOM             = 18;
-  
-  private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -117,15 +118,21 @@ public class MapsActivity extends AppCompatActivity
     switch (v.getId()) {
       case R.id.iv_list_button:
         final ListFragment listFragment = new ListFragment();
-        replaceFragment(listFragment);
+        replaceFragment(listFragment, user);
         break;
       case R.id.iv_add_button:
-        SaveFragment saveFragment = new SaveFragment();
-        replaceFragment(saveFragment);
+        if (intentToAdd) {
+          // TODO: add current fragment global variable, and call that fragment to save POI details
+          Animator.centerMapOnPoint(currentMarker.getPosition(), STANDARD_CAMERA_SPEED, STANDARD_ZOOM,
+                                    map);
+        }
+        Animator.windowDown(popupWindow);
+        windowIsOpen = false;
+        toggleAdd();
         break;
       case R.id.iv_search_button:
         SearchFragment searchFragment = new SearchFragment();
-        replaceFragment(searchFragment);
+        replaceFragment(searchFragment, user);
         break;
       default:
         break;
@@ -135,7 +142,7 @@ public class MapsActivity extends AppCompatActivity
   @Override
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
-    
+    map.setOnMapClickListener(this);
     if (ActivityCompat.checkSelfPermission(this,
                                            Manifest.permission.ACCESS_FINE_LOCATION) ==
         PackageManager.PERMISSION_GRANTED) {
@@ -144,10 +151,10 @@ public class MapsActivity extends AppCompatActivity
     
   }
   
-  private void replaceFragment(final Fragment f) {
+  private void replaceFragment(final Fragment f, LatLng latLng) {
     if (windowIsOpen) { // wait to start expanding until window finishes collapsing
       Animator.windowDown(popupWindow);
-      Animator.offsetCenterMapOnPoint(user, SLOWER_CAMERA_SPEED, STANDARD_ZOOM, map);
+      Animator.offsetCenterMapOnPoint(latLng, SLOWER_CAMERA_SPEED, STANDARD_ZOOM, map);
       Handler handler = new Handler();
       handler.postDelayed(new Runnable() {
         public void run() {
@@ -159,7 +166,7 @@ public class MapsActivity extends AppCompatActivity
         }
       }, 350);
     } else {
-      Animator.offsetCenterMapOnPoint(user, STANDARD_CAMERA_SPEED, STANDARD_ZOOM, map);
+      Animator.offsetCenterMapOnPoint(latLng, STANDARD_CAMERA_SPEED, STANDARD_ZOOM, map);
       getSupportFragmentManager()
           .beginTransaction()
           .replace(R.id.popupWindow, f)
@@ -167,6 +174,14 @@ public class MapsActivity extends AppCompatActivity
       Animator.windowUp(popupWindow, defaultHeight);
     }
     windowIsOpen = true;
+  }
+  
+  private void toggleAdd() {
+    intentToAdd = !intentToAdd;
+    add.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.add));
+    add.getDrawable().setTint((intentToAdd) ? ContextCompat.getColor(this, R.color.white_primary)
+                                            : ContextCompat
+                                  .getColor(this, R.color.white_primary_87));
   }
   
   private void setupPermissions() {
@@ -284,7 +299,17 @@ public class MapsActivity extends AppCompatActivity
   }
   
   @Override public void onMapClick(LatLng latLng) {
-    
+    if (intentToAdd) {
+      currentMarker = map.addMarker(new MarkerOptions()
+                                        .position(latLng)
+                                        .icon(BitmapDescriptorFactory
+                                                  .defaultMarker(
+                                                      BitmapDescriptorFactory.HUE_YELLOW)));
+      add.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.done));
+      add.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary));
+      SaveFragment saveFragment = new SaveFragment();
+      replaceFragment(saveFragment, currentMarker.getPosition());
+    }
   }
   
   @Override public boolean onMarkerClick(Marker marker) {
