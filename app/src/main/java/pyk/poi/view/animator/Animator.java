@@ -35,6 +35,10 @@ public class Animator {
   }
   
   public static void windowDown(final View v) {
+    if (v.getVisibility() == View.GONE) {
+      return;
+    }
+    
     final int initialHeight = v.getMeasuredHeight();
     
     Animation a = new Animation() {

@@ -109,28 +109,28 @@ public class MapsActivity extends AppCompatActivity
     }
     
     setupPermissions();
-    
-    
   }
   
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
       case R.id.iv_list_button:
+        toggleAdd(false);
         final ListFragment listFragment = new ListFragment();
         replaceFragment(listFragment, user);
         break;
       case R.id.iv_add_button:
         if (intentToAdd) {
           // TODO: add current fragment global variable, and call that fragment to save POI details
-          Animator.centerMapOnPoint(currentMarker.getPosition(), STANDARD_CAMERA_SPEED, STANDARD_ZOOM,
-                                    map);
+          LatLng loc = (currentMarker != null) ? currentMarker.getPosition() : user;
+          Animator.centerMapOnPoint(loc, STANDARD_CAMERA_SPEED, STANDARD_ZOOM, map);
         }
         Animator.windowDown(popupWindow);
         windowIsOpen = false;
-        toggleAdd();
+        toggleAdd(true);
         break;
       case R.id.iv_search_button:
+        toggleAdd(false);
         SearchFragment searchFragment = new SearchFragment();
         replaceFragment(searchFragment, user);
         break;
@@ -176,8 +176,9 @@ public class MapsActivity extends AppCompatActivity
     windowIsOpen = true;
   }
   
-  private void toggleAdd() {
-    intentToAdd = !intentToAdd;
+  private void toggleAdd(boolean initFromAdd) {
+    // TODO: add code to remove unsaved markers
+    intentToAdd = (initFromAdd) && !intentToAdd;
     add.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.add));
     add.getDrawable().setTint((intentToAdd) ? ContextCompat.getColor(this, R.color.white_primary)
                                             : ContextCompat
