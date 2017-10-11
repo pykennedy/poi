@@ -26,4 +26,15 @@ public class DataSource {
   public POITable getPoiTable() {
     return poiTable;
   }
+  
+  public void savePOI(POIItem poiItem) {
+    POITable.Builder builder = new POITable.Builder()
+                     .setLatitude(poiItem.getLat())
+        .setLongitude(poiItem.getLng())
+        .setName(poiItem.getName())
+        .setCategory(poiItem.getCategory())
+        .setNotes(poiItem.getNotes())
+        .setViewed(poiItem.isViewed());
+    builder.insert(databaseOpenHelper.getWritableDatabase());
+  }
 }

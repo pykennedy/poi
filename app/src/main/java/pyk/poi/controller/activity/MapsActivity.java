@@ -67,6 +67,8 @@ public class MapsActivity extends AppCompatActivity
   FusedLocationProviderClient fusedLocationProviderClient;
   boolean accessGranted = false;
   
+  private SaveFragment saveFragment;
+  
   public static final  int STANDARD_CAMERA_SPEED = 400;
   private static final int SLOWER_CAMERA_SPEED   = 700;
   private static final int STANDARD_ZOOM         = 17;
@@ -121,9 +123,11 @@ public class MapsActivity extends AppCompatActivity
         break;
       case R.id.iv_add_button:
         if (intentToAdd) {
-          // TODO: add current fragment global variable, and call that fragment to save POI details
           LatLng loc = (currentMarker != null) ? currentMarker.getPosition() : user;
           Animator.centerMapOnPoint(loc, STANDARD_CAMERA_SPEED, STANDARD_ZOOM, map);
+          if (windowIsOpen) {
+            saveFragment.triggerSave();
+          }
         }
         Animator.windowDown(popupWindow);
         windowIsOpen = false;
@@ -183,6 +187,9 @@ public class MapsActivity extends AppCompatActivity
     add.getDrawable().setTint((intentToAdd) ? ContextCompat.getColor(this, R.color.white_primary)
                                             : ContextCompat
                                   .getColor(this, R.color.white_primary_87));
+    if (intentToAdd) {
+      Toast.makeText(this, "Click on the map to add a POI", Toast.LENGTH_SHORT).show();
+    }
   }
   
   private void setupPermissions() {
@@ -308,7 +315,7 @@ public class MapsActivity extends AppCompatActivity
                                                       BitmapDescriptorFactory.HUE_YELLOW)));
       add.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.done));
       add.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary));
-      SaveFragment saveFragment = new SaveFragment();
+      saveFragment = new SaveFragment();
       replaceFragment(saveFragment, currentMarker.getPosition());
     }
   }

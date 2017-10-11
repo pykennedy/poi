@@ -3,6 +3,7 @@ package pyk.poi.model.database.table;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class POITable extends Table {
   
@@ -42,6 +43,7 @@ public class POITable extends Table {
     
     @Override
     public long insert(SQLiteDatabase writeableDB) {
+      Log.i("asdf","attempted to insert");
       return writeableDB.insert(NAME, null, values);
     }
     
@@ -78,8 +80,8 @@ public class POITable extends Table {
            + COLUMN_NAME + " TEXT,"
            + COLUMN_CATEGORY + " TEXT,"
            + COLUMN_NOTES + " TEXT,"
-           + COLUMN_VIEWED + " INTEGER DEFAULT 0"
-           + "primary key (" + COLUMN_LATITUDE + ", " + COLUMN_LONGITUDE + ")";
+           + COLUMN_VIEWED + " INTEGER DEFAULT 0,"
+           + "primary key (" + COLUMN_LATITUDE + ", " + COLUMN_LONGITUDE + "))";
   }
   
   public static String getLatitude(Cursor cursor)  { return getString(cursor, COLUMN_LATITUDE); }
