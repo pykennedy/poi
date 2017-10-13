@@ -10,7 +10,7 @@ public class POIItem {
   private double  lng;
   private boolean viewed;
   
-  public POIItem(String name, String category, String notes, double lat, double lng,
+  public POIItem(double lat, double lng, String name, String category, String notes,
                  boolean viewed) {
     this.lat = lat;
     this.lng = lng;
