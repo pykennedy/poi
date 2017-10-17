@@ -2,6 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/poi_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        style="@style/Name"
+        android:text="not found"
+        android:background="@drawable/list_selector"
+        android:layout_marginBottom="3dp"
+        android:textColor="@color/text_primary"
+        android:maxLines="1"
+        android:elevation="2dp"/>
 
 </LinearLayout>

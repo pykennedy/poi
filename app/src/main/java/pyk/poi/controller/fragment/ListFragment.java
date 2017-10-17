@@ -1,6 +1,9 @@
 package pyk.poi.controller.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +12,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import pyk.poi.R;
+import pyk.poi.view.adapter.ItemAdapter;
+
+import static pyk.poi.controller.activity.MapsActivity.map;
 
 
 public class ListFragment extends android.support.v4.app.Fragment {
-  private View    view;
-  private Spinner category;
+  private View        view;
+  private Spinner     category;
+  private ItemAdapter itemAdapter;
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +43,12 @@ public class ListFragment extends android.support.v4.app.Fragment {
       @Override
       public void onNothingSelected(AdapterView<?> parent) {}
     });
+  
+    itemAdapter = new ItemAdapter(map);
+    RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
+    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    recyclerView.setItemAnimator(new DefaultItemAnimator());
+    recyclerView.setAdapter(itemAdapter);
     
     return view;
   }
