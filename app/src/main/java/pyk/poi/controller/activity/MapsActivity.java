@@ -54,15 +54,15 @@ import pyk.poi.view.animator.Animator;
 public class MapsActivity extends AppCompatActivity
     implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
   
-  private View popupWindow;
+  public static View popupWindow;
   
-  private GoogleMap map;
+  public static GoogleMap map;
   private Toolbar   toolbar;
   private ImageView list;
   private ImageView add;
   private ImageView search;
   
-  private        boolean windowIsOpen;
+  public static  boolean windowIsOpen;
   private static int     defaultHeight;
   private        boolean intentToAdd;
   
@@ -75,8 +75,8 @@ public class MapsActivity extends AppCompatActivity
   private SaveFragment saveFragment;
   
   public static final  int STANDARD_CAMERA_SPEED = 400;
-  private static final int SLOWER_CAMERA_SPEED   = 700;
-  private static final int STANDARD_ZOOM         = 17;
+  public static final  int SLOWER_CAMERA_SPEED   = 700;
+  public static final  int STANDARD_ZOOM         = 17;
   private static final int FAR_ZOOM              = 15;
   private static final int NEAR_ZOOM             = 18;
   
