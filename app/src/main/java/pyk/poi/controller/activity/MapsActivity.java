@@ -40,10 +40,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.List;
+
+import pyk.poi.POIApplication;
 import pyk.poi.R;
 import pyk.poi.controller.fragment.ListFragment;
 import pyk.poi.controller.fragment.SaveFragment;
 import pyk.poi.controller.fragment.SearchFragment;
+import pyk.poi.model.DataSource;
+import pyk.poi.model.POIItem;
 import pyk.poi.view.animator.Animator;
 
 public class MapsActivity extends AppCompatActivity
@@ -153,6 +158,13 @@ public class MapsActivity extends AppCompatActivity
       setupLocation(map);
     }
     
+    DataSource    dataSource  = POIApplication.getSharedDataSource();
+    List<POIItem> poiItemList = dataSource.getPOIList();
+    if (poiItemList != null || !poiItemList.isEmpty()) {
+      for (POIItem poiItem : poiItemList) {
+        map.addMarker(new MarkerOptions().position(new LatLng(poiItem.getLat(), poiItem.getLng())));
+      }
+    }
   }
   
   private void replaceFragment(final Fragment f, LatLng latLng) {

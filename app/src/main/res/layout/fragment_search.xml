@@ -7,7 +7,7 @@
               android:layout_marginEnd="2dp"
               android:layout_marginTop="4dp"
               android:layout_marginBottom="4dp">
-    <EditText
+    <pyk.poi.view.custom.EditTextWithDone
         android:id="@+id/et_search"
         style="@style/Name"
         android:layout_width="match_parent"

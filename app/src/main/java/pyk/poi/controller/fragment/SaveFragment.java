@@ -33,9 +33,9 @@ public class SaveFragment extends Fragment {
   
   public void triggerSave() {
     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-    POIItem poiItem = new POIItem(name.getText().toString(), category.getSelectedItem().toString(),
-                                  description.getText().toString(), marker.getPosition().latitude,
-                                  marker.getPosition().longitude, false);
+    POIItem poiItem = new POIItem(marker.getPosition().latitude, marker.getPosition().longitude,
+                                  name.getText().toString(), category.getSelectedItem().toString(),
+                                  description.getText().toString(), false);
     dataSource.savePOI(poiItem);
   }
   
