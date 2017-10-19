@@ -44,6 +44,7 @@ import java.util.List;
 
 import pyk.poi.POIApplication;
 import pyk.poi.R;
+import pyk.poi.controller.fragment.DetailsFragment;
 import pyk.poi.controller.fragment.ListFragment;
 import pyk.poi.controller.fragment.SaveFragment;
 import pyk.poi.controller.fragment.SearchFragment;
@@ -151,6 +152,7 @@ public class MapsActivity extends AppCompatActivity
   @Override
   public void onMapReady(GoogleMap googleMap) {
     map = googleMap;
+    map.setOnMarkerClickListener(this);
     map.setOnMapClickListener(this);
     if (ActivityCompat.checkSelfPermission(this,
                                            Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -333,7 +335,11 @@ public class MapsActivity extends AppCompatActivity
   }
   
   @Override public boolean onMarkerClick(Marker marker) {
-    return false;
+    currentMarker = marker;
+    toggleAdd(false);
+    final DetailsFragment detailsFragment = new DetailsFragment();
+    replaceFragment(detailsFragment, currentMarker.getPosition());
+    return true;
   }
   
 }

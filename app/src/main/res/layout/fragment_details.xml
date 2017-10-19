@@ -65,7 +65,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/et_description_details"
+        android:id="@+id/tv_description_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="2dp"

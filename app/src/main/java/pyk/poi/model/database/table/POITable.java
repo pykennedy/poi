@@ -100,10 +100,10 @@ public class POITable extends Table {
     return readableDB.rawQuery("SELECT * FROM " + NAME, null);
   }
   
-  public Cursor fetchRowByLatLng(SQLiteDatabase readableDB, long lat, long lng) {
+  public Cursor fetchRowByLatLng(SQLiteDatabase readableDB, double lat, double lng) {
     String where = LAT + " = ?" + " AND " + LNG + " = ?";
-    String sLat  = Long.toString(lat);
-    String sLng  = Long.toString(lng);
+    String sLat  = Double.toString(lat);
+    String sLng  = Double.toString(lng);
     return readableDB.query(false, getName(), null, where, new String[]{sLat, sLng}, null, null,
                             null, null);
   }
