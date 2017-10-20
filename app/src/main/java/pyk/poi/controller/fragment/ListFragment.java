@@ -38,6 +38,10 @@ public class ListFragment extends android.support.v4.app.Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String catString = category.getItemAtPosition(position).toString();
+        if(catString.equals("All:"))
+          itemAdapter.setAll();
+        else
+          itemAdapter.setCategory(catString);
       }
       
       @Override

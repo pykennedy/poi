@@ -25,7 +25,7 @@
             android:text="Name"/>
 
         <ImageView
-            android:id="@+id/iv_down_details"
+            android:id="@+id/iv_viewed_details"
             style="@style/WindowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:layout_margin="2dp"
             android:elevation="2dp"
             android:clickable="true"
-            android:src="@drawable/arrow_down"/>
+            android:src="@drawable/viewed"/>
     </LinearLayout>
 
     <LinearLayout
@@ -65,7 +65,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/et_description_details"
+        android:id="@+id/tv_description_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="2dp"

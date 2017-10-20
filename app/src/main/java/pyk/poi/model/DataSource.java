@@ -2,6 +2,8 @@ package pyk.poi.model;
 
 import android.database.Cursor;
 
+import com.google.android.gms.maps.model.Marker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +34,35 @@ public class DataSource {
     return poiTable;
   }
   
+  public POIItem getPOIItemByMarker(Marker marker) {
+    Cursor cursor = getPOITable().fetchRowByLatLng(databaseOpenHelper.getReadableDatabase(),
+                                                   marker.getPosition().latitude,
+                                                   marker.getPosition().longitude);
+    POIItem poiItem = null;
+    if (cursor.moveToFirst()) {
+      poiItem = itemFromCursor(cursor);
+      cursor.close();
+    }
+    return poiItem;
+  }
+  
   public List<POIItem> getPOIList() {
     ArrayList<POIItem> poiItems = new ArrayList<>();
     Cursor
         cursor = getPOITable().fetchAllItems(databaseOpenHelper.getReadableDatabase());
+    if (cursor.moveToFirst()) {
+      do {
+        poiItems.add(itemFromCursor(cursor));
+      } while (cursor.moveToNext());
+      cursor.close();
+    }
+    return poiItems;
+  }
+  
+  public List<POIItem> getPOIListByCategory(String category) {
+    ArrayList<POIItem> poiItems = new ArrayList<>();
+    Cursor cursor = getPOITable().fetchAllPoiByCategory(
+        databaseOpenHelper.getReadableDatabase(), category);
     if (cursor.moveToFirst()) {
       do {
         poiItems.add(itemFromCursor(cursor));
@@ -65,4 +92,14 @@ public class DataSource {
     builder.insert(databaseOpenHelper.getWritableDatabase());
   }
   
+  public void updatePOI(POIItem poiItem) {
+    POITable.Builder builder = new POITable.Builder()
+        .setLatitude(poiItem.getLat())
+        .setLongitude(poiItem.getLng())
+        .setName(poiItem.getName())
+        .setCategory(poiItem.getCategory())
+        .setNotes(poiItem.getNotes())
+        .setViewed(poiItem.isViewed());
+    builder.update(databaseOpenHelper.getWritableDatabase(), poiItem.getLat(), poiItem.getLng());
+  }
 }

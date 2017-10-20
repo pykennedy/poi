@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -55,6 +56,10 @@ public class SaveFragment extends Fragment {
       @Override
       public void onNothingSelected(AdapterView<?> parent) {}
     });
+    ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.list_categories,
+                                                           R.layout.spinner_item);
+    adapter.setDropDownViewResource(R.layout.spinner_dropdown);
+    category.setAdapter(adapter);
     
     return view;
   }
