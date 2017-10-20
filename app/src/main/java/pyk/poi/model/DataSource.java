@@ -92,4 +92,14 @@ public class DataSource {
     builder.insert(databaseOpenHelper.getWritableDatabase());
   }
   
+  public void updatePOI(POIItem poiItem) {
+    POITable.Builder builder = new POITable.Builder()
+        .setLatitude(poiItem.getLat())
+        .setLongitude(poiItem.getLng())
+        .setName(poiItem.getName())
+        .setCategory(poiItem.getCategory())
+        .setNotes(poiItem.getNotes())
+        .setViewed(poiItem.isViewed());
+    builder.update(databaseOpenHelper.getWritableDatabase(), poiItem.getLat(), poiItem.getLng());
+  }
 }
