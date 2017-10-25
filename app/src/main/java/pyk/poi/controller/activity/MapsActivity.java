@@ -50,6 +50,7 @@ import pyk.poi.controller.fragment.SaveFragment;
 import pyk.poi.controller.fragment.SearchFragment;
 import pyk.poi.model.DataSource;
 import pyk.poi.model.POIItem;
+import pyk.poi.model.yelp.YelpAPI;
 import pyk.poi.view.animator.Animator;
 
 public class MapsActivity extends AppCompatActivity
@@ -58,10 +59,10 @@ public class MapsActivity extends AppCompatActivity
   public static View popupWindow;
   
   public static GoogleMap map;
-  private Toolbar   toolbar;
-  private ImageView list;
-  private ImageView add;
-  private ImageView search;
+  private       Toolbar   toolbar;
+  private       ImageView list;
+  private       ImageView add;
+  private       ImageView search;
   
   public static  boolean windowIsOpen;
   private static int     defaultHeight;
@@ -167,6 +168,22 @@ public class MapsActivity extends AppCompatActivity
         map.addMarker(new MarkerOptions().position(new LatLng(poiItem.getLat(), poiItem.getLng())));
       }
     }
+    
+    Thread thread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          YelpAPI yelpAPI = new YelpAPI();
+          yelpAPI.searchYelp("panda express", user);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+    
+    thread.start();
+    
+    
   }
   
   private void replaceFragment(final Fragment f, LatLng latLng) {
