@@ -168,13 +168,12 @@ public class MapsActivity extends AppCompatActivity
         map.addMarker(new MarkerOptions().position(new LatLng(poiItem.getLat(), poiItem.getLng())));
       }
     }
-    
     Thread thread = new Thread(new Runnable() {
       @Override
       public void run() {
         try {
           YelpAPI yelpAPI = new YelpAPI();
-          yelpAPI.searchYelp("panda express", user);
+          yelpAPI.searchYelp("panda", user);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -182,8 +181,6 @@ public class MapsActivity extends AppCompatActivity
     });
     
     thread.start();
-    
-    
   }
   
   private void replaceFragment(final Fragment f, LatLng latLng) {
@@ -354,9 +351,20 @@ public class MapsActivity extends AppCompatActivity
   @Override public boolean onMarkerClick(Marker marker) {
     currentMarker = marker;
     toggleAdd(false);
-    final DetailsFragment detailsFragment = new DetailsFragment();
-    replaceFragment(detailsFragment, currentMarker.getPosition());
-    return true;
+    if (currentMarker.getTitle() == null) {
+      final DetailsFragment detailsFragment = new DetailsFragment();
+      replaceFragment(detailsFragment, currentMarker.getPosition());
+      return true;
+    } else {
+      intentToAdd = true;
+      currentMarker.setIcon(
+          BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+      add.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.done));
+      add.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary));
+      saveFragment = new SaveFragment();
+      replaceFragment(saveFragment, currentMarker.getPosition());
+      return true;
+    }
   }
   
 }

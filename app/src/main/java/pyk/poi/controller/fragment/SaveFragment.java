@@ -61,6 +61,10 @@ public class SaveFragment extends Fragment {
     adapter.setDropDownViewResource(R.layout.spinner_dropdown);
     category.setAdapter(adapter);
     
+    if(marker.getTitle() != null) {
+      name.setText(marker.getTitle());
+    }
+    
     return view;
   }
 }
