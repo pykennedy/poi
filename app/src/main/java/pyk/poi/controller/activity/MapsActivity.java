@@ -50,6 +50,7 @@ import pyk.poi.controller.fragment.SaveFragment;
 import pyk.poi.controller.fragment.SearchFragment;
 import pyk.poi.model.DataSource;
 import pyk.poi.model.POIItem;
+import pyk.poi.model.yelp.YelpAPI;
 import pyk.poi.view.animator.Animator;
 
 public class MapsActivity extends AppCompatActivity
@@ -58,10 +59,10 @@ public class MapsActivity extends AppCompatActivity
   public static View popupWindow;
   
   public static GoogleMap map;
-  private Toolbar   toolbar;
-  private ImageView list;
-  private ImageView add;
-  private ImageView search;
+  private       Toolbar   toolbar;
+  private       ImageView list;
+  private       ImageView add;
+  private       ImageView search;
   
   public static  boolean windowIsOpen;
   private static int     defaultHeight;
@@ -167,6 +168,19 @@ public class MapsActivity extends AppCompatActivity
         map.addMarker(new MarkerOptions().position(new LatLng(poiItem.getLat(), poiItem.getLng())));
       }
     }
+    Thread thread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          YelpAPI yelpAPI = new YelpAPI();
+          yelpAPI.searchYelp("panda", user);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+    
+    thread.start();
   }
   
   private void replaceFragment(final Fragment f, LatLng latLng) {
@@ -337,9 +351,20 @@ public class MapsActivity extends AppCompatActivity
   @Override public boolean onMarkerClick(Marker marker) {
     currentMarker = marker;
     toggleAdd(false);
-    final DetailsFragment detailsFragment = new DetailsFragment();
-    replaceFragment(detailsFragment, currentMarker.getPosition());
-    return true;
+    if (currentMarker.getTitle() == null) {
+      final DetailsFragment detailsFragment = new DetailsFragment();
+      replaceFragment(detailsFragment, currentMarker.getPosition());
+      return true;
+    } else {
+      intentToAdd = true;
+      currentMarker.setIcon(
+          BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+      add.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.done));
+      add.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary));
+      saveFragment = new SaveFragment();
+      replaceFragment(saveFragment, currentMarker.getPosition());
+      return true;
+    }
   }
   
 }

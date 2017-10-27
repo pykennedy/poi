@@ -16,7 +16,7 @@ import pyk.poi.model.POIItem;
 
 public class DetailsFragment extends Fragment
     implements View.OnClickListener {
-  View view;
+  View      view;
   TextView  name;
   TextView  category;
   TextView  description;
@@ -42,7 +42,6 @@ public class DetailsFragment extends Fragment
     viewed.getDrawable().setTint(
         (poiItem.isViewed()) ? ContextCompat.getColor(view.getContext(), R.color.primary_accent)
                              : ContextCompat.getColor(view.getContext(), R.color.black_54));
-    
     return view;
   }
   
