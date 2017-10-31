@@ -27,6 +27,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
   
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    onCreate(db);
     for (Table table : tables) {
       table.onUpgrade(db, oldVersion, newVersion);
     }

@@ -13,15 +13,22 @@ import pyk.poi.POIApplication;
 import pyk.poi.R;
 import pyk.poi.controller.activity.MapsActivity;
 import pyk.poi.model.POIItem;
+import pyk.poi.model.geofence.GeofenceHelper;
 
 public class DetailsFragment extends Fragment
     implements View.OnClickListener {
-  View      view;
-  TextView  name;
-  TextView  category;
-  TextView  description;
-  ImageView viewed;
-  POIItem   poiItem;
+  MapsActivity mapsActivity;
+  View         view;
+  TextView     name;
+  TextView     category;
+  TextView     description;
+  ImageView    viewed;
+  ImageView    notification;
+  POIItem      poiItem;
+  
+  public void setActivity(MapsActivity mapsActivity) {
+    this.mapsActivity = mapsActivity;
+  }
   
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +39,8 @@ public class DetailsFragment extends Fragment
     description = (TextView) view.findViewById(R.id.tv_description_details);
     viewed = (ImageView) view.findViewById(R.id.iv_viewed_details);
     viewed.setOnClickListener(this);
+    notification = (ImageView) view.findViewById(R.id.iv_notification_details);
+    notification.setOnClickListener(this);
     
     poiItem = POIApplication.getSharedDataSource().getPOIItemByMarker(
         MapsActivity.currentMarker);
@@ -41,6 +50,9 @@ public class DetailsFragment extends Fragment
     description.setText(poiItem.getNotes());
     viewed.getDrawable().setTint(
         (poiItem.isViewed()) ? ContextCompat.getColor(view.getContext(), R.color.primary_accent)
+                             : ContextCompat.getColor(view.getContext(), R.color.black_54));
+    notification.getDrawable().setTint(
+        (poiItem.isNotify()) ? ContextCompat.getColor(view.getContext(), R.color.primary_accent)
                              : ContextCompat.getColor(view.getContext(), R.color.black_54));
     return view;
   }
@@ -55,6 +67,13 @@ public class DetailsFragment extends Fragment
                                  : ContextCompat.getColor(view.getContext(), R.color.black_54));
         break;
       case R.id.iv_notification_details:
+        poiItem.setNotify(!poiItem.isNotify());
+        POIApplication.getSharedDataSource().updatePOI(poiItem);
+        notification.getDrawable().setTint(
+            (poiItem.isNotify()) ? ContextCompat.getColor(view.getContext(), R.color.primary_accent)
+                                 : ContextCompat.getColor(view.getContext(), R.color.black_54));
+        GeofenceHelper.updateAllFences(MapsActivity.apiClient, MapsActivity.geofenceList,
+                                       MapsActivity.pendingIntent, mapsActivity);
         break;
       default:
         break;

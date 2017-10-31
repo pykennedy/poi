@@ -78,7 +78,8 @@ public class DataSource {
                        POITable.getName(cursor),
                        POITable.getCategory(cursor),
                        POITable.getNotes(cursor),
-                       POITable.getViewed(cursor));
+                       POITable.getViewed(cursor),
+                       POITable.getNotify(cursor));
   }
   
   public void savePOI(POIItem poiItem) {
@@ -88,7 +89,8 @@ public class DataSource {
         .setName(poiItem.getName())
         .setCategory(poiItem.getCategory())
         .setNotes(poiItem.getNotes())
-        .setViewed(poiItem.isViewed());
+        .setViewed(poiItem.isViewed())
+        .setNotify(poiItem.isNotify());
     builder.insert(databaseOpenHelper.getWritableDatabase());
   }
   
@@ -99,7 +101,8 @@ public class DataSource {
         .setName(poiItem.getName())
         .setCategory(poiItem.getCategory())
         .setNotes(poiItem.getNotes())
-        .setViewed(poiItem.isViewed());
+        .setViewed(poiItem.isViewed())
+        .setNotify(poiItem.isNotify());
     builder.update(databaseOpenHelper.getWritableDatabase(), poiItem.getLat(), poiItem.getLng());
   }
 }

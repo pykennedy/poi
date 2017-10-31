@@ -40,6 +40,11 @@ public class POITable extends Table {
       values.put(COLUMN_VIEWED, viewed ? 1 : 0);
       return this;
     }
+  
+    public Builder setNotify(boolean notify) {
+      values.put(COLUMN_NOTIFY, notify ? 1 : 0);
+      return this;
+    }
     
     @Override
     public long insert(SQLiteDatabase writeableDB) {
@@ -66,6 +71,7 @@ public class POITable extends Table {
   private static final String COLUMN_CATEGORY  = "category";
   private static final String COLUMN_NOTES     = "notes";
   private static final String COLUMN_VIEWED    = "viewed";
+  private static final String COLUMN_NOTIFY    = "notify";
   
   @Override
   public String getName() {
@@ -81,6 +87,7 @@ public class POITable extends Table {
            + COLUMN_CATEGORY + " TEXT,"
            + COLUMN_NOTES + " TEXT,"
            + COLUMN_VIEWED + " INTEGER DEFAULT 0,"
+           + COLUMN_NOTIFY + " INTEGER DEFAULT 0,"
            + "primary key (" + COLUMN_LATITUDE + ", " + COLUMN_LONGITUDE + "))";
   }
   
@@ -95,6 +102,8 @@ public class POITable extends Table {
   public static String getNotes(Cursor cursor)     { return getString(cursor, COLUMN_NOTES); }
   
   public static boolean getViewed(Cursor cursor)   { return getBoolean(cursor, COLUMN_VIEWED); }
+  
+  public static boolean getNotify(Cursor cursor)   { return getBoolean(cursor, COLUMN_NOTIFY); }
   
   public Cursor fetchAllItems(SQLiteDatabase readableDB) {
     return readableDB.rawQuery("SELECT * FROM " + NAME, null);

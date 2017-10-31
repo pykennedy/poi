@@ -1,12 +1,14 @@
 package pyk.poi.controller.activity;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -17,10 +19,15 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -40,6 +47,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pyk.poi.POIApplication;
@@ -50,19 +58,21 @@ import pyk.poi.controller.fragment.SaveFragment;
 import pyk.poi.controller.fragment.SearchFragment;
 import pyk.poi.model.DataSource;
 import pyk.poi.model.POIItem;
+import pyk.poi.model.geofence.GeofenceHelper;
 import pyk.poi.model.yelp.YelpAPI;
 import pyk.poi.view.animator.Animator;
 
 public class MapsActivity extends AppCompatActivity
-    implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+    implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, ResultCallback<Status>, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
   
   public static View popupWindow;
   
-  public static GoogleMap map;
-  private       Toolbar   toolbar;
-  private       ImageView list;
-  private       ImageView add;
-  private       ImageView search;
+  public static GoogleMap       map;
+  public static GoogleApiClient apiClient;
+  private       Toolbar         toolbar;
+  private       ImageView       list;
+  private       ImageView       add;
+  private       ImageView       search;
   
   public static  boolean windowIsOpen;
   private static int     defaultHeight;
@@ -73,6 +83,8 @@ public class MapsActivity extends AppCompatActivity
   private       LocationCallback locationCallback;
   FusedLocationProviderClient fusedLocationProviderClient;
   boolean accessGranted = false;
+  public static PendingIntent pendingIntent;
+  public static List<Geofence> geofenceList = new ArrayList<>();
   
   private SaveFragment saveFragment;
   
@@ -117,6 +129,15 @@ public class MapsActivity extends AppCompatActivity
       });
     }
     
+    if (apiClient == null) {
+      apiClient = new GoogleApiClient.Builder(this)
+          .addConnectionCallbacks(this)
+          .addOnConnectionFailedListener(this)
+          .addApi(LocationServices.API)
+          .build();
+    }
+    apiClient.connect();
+    
     setupPermissions();
   }
   
@@ -133,7 +154,7 @@ public class MapsActivity extends AppCompatActivity
           LatLng loc = (currentMarker != null) ? currentMarker.getPosition() : user;
           Animator.centerMapOnPoint(loc, STANDARD_CAMERA_SPEED, STANDARD_ZOOM, map);
           if (windowIsOpen) {
-            saveFragment.triggerSave();
+            saveFragment.triggerSave(this);
           }
         }
         Animator.windowDown(popupWindow);
@@ -220,7 +241,7 @@ public class MapsActivity extends AppCompatActivity
     }
   }
   
-  private void setupPermissions() {
+  public void setupPermissions() {
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
         PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(this,
@@ -247,6 +268,12 @@ public class MapsActivity extends AppCompatActivity
   }
   
   private void setupLocation(final GoogleMap map) {
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+        PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                                                                                Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                             PackageManager.PERMISSION_GRANTED) {
+      return;
+    }
     map.setMyLocationEnabled(true);
     LocationRequest locationRequest = new LocationRequest();
     locationRequest.setInterval(10000);
@@ -298,13 +325,6 @@ public class MapsActivity extends AppCompatActivity
         PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                                                                                 Manifest.permission.ACCESS_COARSE_LOCATION) !=
                                              PackageManager.PERMISSION_GRANTED) {
-      // TODO: Consider calling
-      //    ActivityCompat#requestPermissions
-      // here to request the missing permissions, and then overriding
-      //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-      //                                          int[] grantResults)
-      // to handle the case where the user grants the permission. See the documentation
-      // for ActivityCompat#requestPermissions for more details.
       return;
     }
     fusedLocationProviderClient.getLastLocation()
@@ -354,6 +374,7 @@ public class MapsActivity extends AppCompatActivity
     if (currentMarker.getTitle() == null) {
       final DetailsFragment detailsFragment = new DetailsFragment();
       replaceFragment(detailsFragment, currentMarker.getPosition());
+      detailsFragment.setActivity(this);
       return true;
     } else {
       intentToAdd = true;
@@ -367,4 +388,19 @@ public class MapsActivity extends AppCompatActivity
     }
   }
   
+  @Override public void onResult(@NonNull Status status) {
+  
+  }
+  
+  @Override public void onConnected(@Nullable Bundle bundle) {
+    GeofenceHelper.updateAllFences(apiClient, geofenceList, pendingIntent, this);
+  }
+  
+  @Override public void onConnectionSuspended(int i) {
+  
+  }
+  
+  @Override public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+  
+  }
 }
