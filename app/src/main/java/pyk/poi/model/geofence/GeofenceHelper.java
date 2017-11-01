@@ -23,10 +23,11 @@ public class GeofenceHelper {
   
   public static void updateAllFences(GoogleApiClient apiClient, List<Geofence> geofenceList,
                                      PendingIntent pendingIntent, MapsActivity mapsActivity) {
+    Log.e("", "got here");
     if (ActivityCompat.checkSelfPermission(POIApplication.getContext(),
                                            Manifest.permission.ACCESS_FINE_LOCATION) !=
         PackageManager.PERMISSION_GRANTED) {
-      Log.e("-----------------------", "permission eror");
+      Log.e("-----------------------", "permission error");
       return;
     }
     
@@ -36,11 +37,14 @@ public class GeofenceHelper {
     // TODO: check for notify is true before adding to list, if not true then remove from list
     if (poiItemList != null && !poiItemList.isEmpty()) {
       for (int i = 0; i < poiItemList.size(); i++) {
+        //ArrayList<String> id = new ArrayList<>();
+        //id.add("" + poiItemList.get(i).getLat() + poiItemList.get(i).getLng());
+        //LocationServices.GeofencingApi.removeGeofences(apiClient, id);
         GeofenceHelper.addFence(geofenceList, poiItemList.get(i));
       }
+      Log.e("", "got here");
       LocationServices.GeofencingApi.addGeofences(apiClient,
-                                                  GeofenceHelper
-                                                      .getGeofencingRequest(geofenceList),
+                                                  GeofenceHelper.getGeofencingRequest(geofenceList),
                                                   GeofenceHelper
                                                       .getGeofencePendingIntent(mapsActivity,
                                                                                 pendingIntent))
@@ -48,7 +52,7 @@ public class GeofenceHelper {
     }
   }
   
-  public static void addFence(List<Geofence> geofenceList, POIItem poiItem) {
+  private static void addFence(List<Geofence> geofenceList, POIItem poiItem) {
     geofenceList.add(new Geofence.Builder()
                          .setRequestId("" + poiItem.getLat() + poiItem.getLng())
                          .setCircularRegion(poiItem.getLat(), poiItem.getLat(), 100)
@@ -58,21 +62,23 @@ public class GeofenceHelper {
                          .build());
   }
   
-  public static GeofencingRequest getGeofencingRequest(List<Geofence> geofenceList) {
+  private static GeofencingRequest getGeofencingRequest(List<Geofence> geofenceList) {
     return new GeofencingRequest.Builder()
         .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
         .addGeofences(geofenceList)
         .build();
   }
   
-  public static PendingIntent getGeofencePendingIntent(MapsActivity mapsActivity,
-                                                       PendingIntent pendingIntent) {
+  private static PendingIntent getGeofencePendingIntent(MapsActivity mapsActivity,
+                                                        PendingIntent pendingIntent) {
     if (pendingIntent != null) {
+      Log.e("", "is null");
       return pendingIntent;
     }
     Intent intent = new Intent(mapsActivity, GeofenceTransitionIntentService.class);
     //POIApplication.getContext().startService(intent);
-    return PendingIntent.getService(POIApplication.getContext(), 0, intent, PendingIntent.
+    pendingIntent = PendingIntent.getService(POIApplication.getContext(), 0, intent, PendingIntent.
         FLAG_UPDATE_CURRENT);
+    return pendingIntent;
   }
 }

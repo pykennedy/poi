@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".model.geofence.GeofenceTransitionIntentService"/>
+        <service android:name="pyk.poi.model.geofence.GeofenceTransitionIntentService"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -39,10 +39,10 @@
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-                <action android:name="com.example.geofence.ACTION_RECEIVE_GEOFENCE" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -67,12 +68,12 @@ public class MapsActivity extends AppCompatActivity
   
   public static View popupWindow;
   
-  public static GoogleMap       map;
+  public static GoogleMap map;
   public static GoogleApiClient apiClient;
-  private       Toolbar         toolbar;
-  private       ImageView       list;
-  private       ImageView       add;
-  private       ImageView       search;
+  private Toolbar   toolbar;
+  private ImageView list;
+  private ImageView add;
+  private ImageView search;
   
   public static  boolean windowIsOpen;
   private static int     defaultHeight;
@@ -98,6 +99,15 @@ public class MapsActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maps);
+  
+    Log.i("", "got here");
+    apiClient = new GoogleApiClient.Builder(this)
+        .addConnectionCallbacks(this)
+        .addOnConnectionFailedListener(this)
+        .addApi(LocationServices.API)
+        .build();
+  
+    apiClient.connect();
     
     popupWindow = findViewById(R.id.popupWindow);
     
@@ -129,14 +139,8 @@ public class MapsActivity extends AppCompatActivity
       });
     }
     
-    if (apiClient == null) {
-      apiClient = new GoogleApiClient.Builder(this)
-          .addConnectionCallbacks(this)
-          .addOnConnectionFailedListener(this)
-          .addApi(LocationServices.API)
-          .build();
-    }
-    apiClient.connect();
+    
+
     
     setupPermissions();
   }
@@ -389,7 +393,7 @@ public class MapsActivity extends AppCompatActivity
   }
   
   @Override public void onResult(@NonNull Status status) {
-  
+    Log.e("", "onResult");
   }
   
   @Override public void onConnected(@Nullable Bundle bundle) {

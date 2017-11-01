@@ -18,15 +18,11 @@ import pyk.poi.R;
 import pyk.poi.controller.activity.MapsActivity;
 
 public class GeofenceTransitionIntentService extends IntentService {
-  public GeofenceTransitionIntentService(String name) {
-    super(name);
-    Log.e("-----------------------", "GeofenceTransitionIntentService");
-  }
   public GeofenceTransitionIntentService() {
     super("");
-    Log.e("-----------------------", "GeofenceTransitionIntentService");
   }
   
+  @Override
   protected void onHandleIntent(Intent intent) {
     Log.e("-----------------------", "onHandleIntent");
     GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
