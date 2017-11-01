@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
@@ -25,6 +26,7 @@ public class GeofenceHelper {
     if (ActivityCompat.checkSelfPermission(POIApplication.getContext(),
                                            Manifest.permission.ACCESS_FINE_LOCATION) !=
         PackageManager.PERMISSION_GRANTED) {
+      Log.e("-----------------------", "permission eror");
       return;
     }
     
@@ -56,10 +58,10 @@ public class GeofenceHelper {
                          .build());
   }
   
-  public static GeofencingRequest getGeofencingRequest(List<Geofence> mGeofenceList) {
+  public static GeofencingRequest getGeofencingRequest(List<Geofence> geofenceList) {
     return new GeofencingRequest.Builder()
         .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
-        .addGeofences(mGeofenceList)
+        .addGeofences(geofenceList)
         .build();
   }
   
@@ -68,8 +70,9 @@ public class GeofenceHelper {
     if (pendingIntent != null) {
       return pendingIntent;
     }
-    Intent intent = new Intent(POIApplication.getContext(), GeofenceTransitionIntentService.class);
-    return PendingIntent.getService(mapsActivity, 0, intent, PendingIntent.
+    Intent intent = new Intent(mapsActivity, GeofenceTransitionIntentService.class);
+    //POIApplication.getContext().startService(intent);
+    return PendingIntent.getService(POIApplication.getContext(), 0, intent, PendingIntent.
         FLAG_UPDATE_CURRENT);
   }
 }
