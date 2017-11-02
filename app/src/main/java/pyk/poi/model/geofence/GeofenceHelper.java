@@ -58,13 +58,13 @@ public class GeofenceHelper {
                          .setCircularRegion(poiItem.getLat(), poiItem.getLat(), 100)
                          .setExpirationDuration(Geofence.NEVER_EXPIRE)
                          .setLoiteringDelay(5000)
-                         .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
+                         .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                          .build());
   }
   
   private static GeofencingRequest getGeofencingRequest(List<Geofence> geofenceList) {
     return new GeofencingRequest.Builder()
-        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
         .addGeofences(geofenceList)
         .build();
   }

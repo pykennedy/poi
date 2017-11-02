@@ -32,7 +32,7 @@ public class GeofenceTransitionIntentService extends IntentService {
     }
     
     int geofenceTransition = geofencingEvent.getGeofenceTransition();
-    if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
+    if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
       List   triggeringGeofences       = geofencingEvent.getTriggeringGeofences();
       String geofenceTransitionDetails = "testing123";
       sendNotification(geofenceTransitionDetails);
