@@ -63,7 +63,7 @@ public class YelpAPI {
             POIItem poiItem = new POIItem(business.getCoordinates().getLatitude(),
                                           business.getCoordinates().getLongitude(),
                                           business.getName(),
-                                          null, null, false);
+                                          null, null, false, false);
             MapsActivity.map.addMarker(
                 new MarkerOptions().position(new LatLng(poiItem.getLat(), poiItem.getLng()))
                                    .icon(BitmapDescriptorFactory

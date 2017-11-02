@@ -18,6 +18,7 @@ import pyk.poi.R;
 import pyk.poi.controller.activity.MapsActivity;
 import pyk.poi.model.DataSource;
 import pyk.poi.model.POIItem;
+import pyk.poi.model.geofence.GeofenceHelper;
 
 public class SaveFragment extends Fragment {
   private DataSource dataSource = POIApplication.getSharedDataSource();
@@ -32,12 +33,13 @@ public class SaveFragment extends Fragment {
     this.marker = MapsActivity.currentMarker;
   }
   
-  public void triggerSave() {
+  public void triggerSave(MapsActivity mapsActivity) {
     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
     POIItem poiItem = new POIItem(marker.getPosition().latitude, marker.getPosition().longitude,
                                   name.getText().toString(), category.getSelectedItem().toString(),
-                                  description.getText().toString(), false);
+                                  description.getText().toString(), false, false);
     dataSource.savePOI(poiItem);
+    GeofenceHelper.updateAllFences(MapsActivity.apiClient, MapsActivity.geofenceList, MapsActivity.pendingIntent, mapsActivity);
   }
   
   @Override

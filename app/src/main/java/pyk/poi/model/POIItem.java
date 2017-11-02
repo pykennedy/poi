@@ -1,23 +1,23 @@
 package pyk.poi.model;
 
 public class POIItem {
-  private String titleID;
-  private String name;
-  private String category;
-  private String notes;
-  private long id = -1;
+  private String  name;
+  private String  category;
+  private String  notes;
   private double  lat;
   private double  lng;
   private boolean viewed;
+  private boolean notify;
   
   public POIItem(double lat, double lng, String name, String category, String notes,
-                 boolean viewed) {
+                 boolean viewed, boolean notify) {
     this.lat = lat;
     this.lng = lng;
     this.name = name;
     this.category = category;
     this.notes = notes;
     this.viewed = viewed;
+    this.notify = notify;
   }
   
   public double getLat() {
@@ -44,6 +44,10 @@ public class POIItem {
     return viewed;
   }
   
+  public boolean isNotify() {
+    return notify;
+  }
+  
   public void setLat(double lat) {
     this.lat = lat;
   }
@@ -67,4 +71,6 @@ public class POIItem {
   public void setViewed(boolean isViewed) {
     this.viewed = isViewed;
   }
+  
+  public void setNotify(boolean notify) { this.notify = notify; }
 }
