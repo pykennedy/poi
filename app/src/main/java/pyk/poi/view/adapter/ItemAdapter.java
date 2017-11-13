@@ -1,7 +1,6 @@
 package pyk.poi.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
   
   @Override
   public ItemAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int index) {
-    View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.poi_item, viewGroup, false);
+    View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.poi_item, viewGroup,
+                                                                       false);
     return new ItemAdapterViewHolder(inflate);
   }
   
@@ -74,7 +74,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
     
     @Override
     public void onClick(View v) {
-      Log.i("", poiItem.getCategory());
       Animator.centerMapOnPoint(new LatLng(poiItem.getLat(), poiItem.getLng()),
                                 MapsActivity.STANDARD_CAMERA_SPEED, MapsActivity.STANDARD_ZOOM,
                                 map);

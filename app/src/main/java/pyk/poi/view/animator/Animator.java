@@ -64,27 +64,27 @@ public class Animator {
   
   public static void centerMapOnPoint(LatLng location, int speed, int zoom, GoogleMap map) {
     map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, zoom), speed,
-                       new GoogleMap.CancelableCallback() {
-                         @Override
-                         public void onFinish() {
-                         }
+                      new GoogleMap.CancelableCallback() {
+                        @Override
+                        public void onFinish() {
+                        }
       
-                         @Override
-                         public void onCancel() {
-                         }
-                       });
+                        @Override
+                        public void onCancel() {
+                        }
+                      });
   }
   
   public static void offsetCenterMapOnPoint(LatLng location, int speed, int zoom, GoogleMap map) {
     double offset = (location == MapsActivity.user) ? 0.0014 : 0.0012;
     LatLng temp   = new LatLng(location.latitude - offset, location.longitude);
     map.animateCamera(CameraUpdateFactory.newLatLngZoom(temp, zoom), speed,
-                       new GoogleMap.CancelableCallback() {
-                         @Override
-                         public void onFinish() {}
+                      new GoogleMap.CancelableCallback() {
+                        @Override
+                        public void onFinish() {}
       
-                         @Override
-                         public void onCancel() {}
-                       });
+                        @Override
+                        public void onCancel() {}
+                      });
   }
 }

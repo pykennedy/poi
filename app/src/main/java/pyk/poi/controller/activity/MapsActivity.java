@@ -60,7 +60,6 @@ import pyk.poi.controller.fragment.SearchFragment;
 import pyk.poi.model.DataSource;
 import pyk.poi.model.POIItem;
 import pyk.poi.model.geofence.GeofenceHelper;
-import pyk.poi.model.yelp.YelpAPI;
 import pyk.poi.view.animator.Animator;
 
 public class MapsActivity extends AppCompatActivity
@@ -68,12 +67,12 @@ public class MapsActivity extends AppCompatActivity
   
   public static View popupWindow;
   
-  public static GoogleMap map;
+  public static GoogleMap       map;
   public static GoogleApiClient apiClient;
-  private Toolbar   toolbar;
-  private ImageView list;
-  private ImageView add;
-  private ImageView search;
+  private       Toolbar         toolbar;
+  private       ImageView       list;
+  private       ImageView       add;
+  private       ImageView       search;
   
   public static  boolean windowIsOpen;
   private static int     defaultHeight;
@@ -88,6 +87,7 @@ public class MapsActivity extends AppCompatActivity
   public static List<Geofence> geofenceList = new ArrayList<>();
   
   private SaveFragment saveFragment;
+  private String currentFrag = "";
   
   public static final  int STANDARD_CAMERA_SPEED = 400;
   public static final  int SLOWER_CAMERA_SPEED   = 700;
@@ -99,14 +99,14 @@ public class MapsActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_maps);
-  
+    
     Log.i("", "got here");
     apiClient = new GoogleApiClient.Builder(this)
         .addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
         .addApi(LocationServices.API)
         .build();
-  
+    
     apiClient.connect();
     
     popupWindow = findViewById(R.id.popupWindow);
@@ -140,18 +140,28 @@ public class MapsActivity extends AppCompatActivity
     }
     
     
-
-    
     setupPermissions();
   }
   
   @Override
   public void onClick(View v) {
+    ImageView iv;
+    dimButtons();
     switch (v.getId()) {
       case R.id.iv_list_button:
+        iv = (ImageView) findViewById(R.id.iv_list_button);
         toggleAdd(false);
-        final ListFragment listFragment = new ListFragment();
-        replaceFragment(listFragment, user);
+        if (currentFrag != "ListFragment") {
+          final ListFragment listFragment = new ListFragment();
+          replaceFragment(listFragment, user);
+          currentFrag = "ListFragment";
+          iv.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary));
+        } else {
+          Animator.windowDown(popupWindow);
+          windowIsOpen = false;
+          currentFrag = "";
+          iv.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary_87));
+        }
         break;
       case R.id.iv_add_button:
         if (intentToAdd) {
@@ -166,9 +176,19 @@ public class MapsActivity extends AppCompatActivity
         toggleAdd(true);
         break;
       case R.id.iv_search_button:
+        iv = (ImageView) findViewById(R.id.iv_search_button);
         toggleAdd(false);
-        SearchFragment searchFragment = new SearchFragment();
-        replaceFragment(searchFragment, user);
+        if (currentFrag != "SearchFragment") {
+          SearchFragment searchFragment = new SearchFragment();
+          replaceFragment(searchFragment, user);
+          currentFrag = "SearchFragment";
+          iv.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary));
+        } else {
+          Animator.windowDown(popupWindow);
+          windowIsOpen = false;
+          currentFrag = "";
+          iv.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary_87));
+        }
         break;
       default:
         break;
@@ -193,19 +213,6 @@ public class MapsActivity extends AppCompatActivity
         map.addMarker(new MarkerOptions().position(new LatLng(poiItem.getLat(), poiItem.getLng())));
       }
     }
-    Thread thread = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          YelpAPI yelpAPI = new YelpAPI();
-          yelpAPI.searchYelp("panda", user);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    });
-    
-    thread.start();
   }
   
   private void replaceFragment(final Fragment f, LatLng latLng) {
@@ -392,8 +399,26 @@ public class MapsActivity extends AppCompatActivity
     }
   }
   
+  private void dimButtons() {
+    ImageView iv;
+    iv = (ImageView) findViewById(R.id.iv_list_button);
+    iv.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary_87));
+    iv = (ImageView) findViewById(R.id.iv_search_button);
+    iv.getDrawable().setTint(ContextCompat.getColor(this, R.color.white_primary_87));
+  }
+  
+  @Override public void onBackPressed() {
+    if (windowIsOpen) {
+      Animator.windowDown(popupWindow);
+      windowIsOpen = false;
+    } else if (intentToAdd) {
+      toggleAdd(false);
+    } else {
+      super.onBackPressed();
+    }
+  }
+  
   @Override public void onResult(@NonNull Status status) {
-    Log.e("", "onResult");
   }
   
   @Override public void onConnected(@Nullable Bundle bundle) {

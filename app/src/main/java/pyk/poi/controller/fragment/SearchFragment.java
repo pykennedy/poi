@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import pyk.poi.R;
 import pyk.poi.controller.activity.MapsActivity;
@@ -47,10 +46,10 @@ public class SearchFragment extends Fragment {
           
           thread.start();
           InputMethodManager
-              imm = (InputMethodManager)getContext().getSystemService(
+              imm = (InputMethodManager) getContext().getSystemService(
               Context.INPUT_METHOD_SERVICE);
           imm.hideSoftInputFromWindow(search.getWindowToken(), 0);
-  
+          
           Animator.windowDown(MapsActivity.popupWindow);
           MapsActivity.windowIsOpen = false;
           return true;

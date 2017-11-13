@@ -9,12 +9,15 @@ public class EditTextWithDone extends android.support.v7.widget.AppCompatEditTex
   public EditTextWithDone(Context context) {
     super(context);
   }
+  
   public EditTextWithDone(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
+  
   public EditTextWithDone(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
   }
+  
   @Override
   public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
     InputConnection conn = super.onCreateInputConnection(outAttrs);
