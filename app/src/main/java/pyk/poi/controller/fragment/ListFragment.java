@@ -38,16 +38,17 @@ public class ListFragment extends android.support.v4.app.Fragment {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String catString = category.getItemAtPosition(position).toString();
-        if(catString.equals("All:"))
+        if (catString.equals("All:")) {
           itemAdapter.setAll();
-        else
+        } else {
           itemAdapter.setCategory(catString);
+        }
       }
       
       @Override
       public void onNothingSelected(AdapterView<?> parent) {}
     });
-  
+    
     itemAdapter = new ItemAdapter(map);
     RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_list);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -2,12 +2,14 @@ package pyk.poi.controller.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -19,14 +21,18 @@ import pyk.poi.controller.activity.MapsActivity;
 import pyk.poi.model.DataSource;
 import pyk.poi.model.POIItem;
 import pyk.poi.model.geofence.GeofenceHelper;
+import pyk.poi.view.animator.Animator;
 
-public class SaveFragment extends Fragment {
+public class SaveFragment extends Fragment
+    implements View.OnClickListener {
   private DataSource dataSource = POIApplication.getSharedDataSource();
   
   View     view;
   EditText name, description;
+  ImageView cancel, notification;
   Spinner category;
   Marker  marker;
+  boolean isNotify = false;
   
   public SaveFragment() {
     super();
@@ -37,9 +43,10 @@ public class SaveFragment extends Fragment {
     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
     POIItem poiItem = new POIItem(marker.getPosition().latitude, marker.getPosition().longitude,
                                   name.getText().toString(), category.getSelectedItem().toString(),
-                                  description.getText().toString(), false, false);
+                                  description.getText().toString(), false, isNotify);
     dataSource.savePOI(poiItem);
-    GeofenceHelper.updateAllFences(MapsActivity.apiClient, MapsActivity.geofenceList, MapsActivity.pendingIntent, mapsActivity);
+    GeofenceHelper.updateAllFences(MapsActivity.apiClient, MapsActivity.geofenceList,
+                                   MapsActivity.pendingIntent, mapsActivity);
   }
   
   @Override
@@ -62,11 +69,33 @@ public class SaveFragment extends Fragment {
                                                            R.layout.spinner_item);
     adapter.setDropDownViewResource(R.layout.spinner_dropdown);
     category.setAdapter(adapter);
+    cancel = (ImageView) view.findViewById(R.id.iv_cancel_save);
+    cancel.setOnClickListener(this);
+    notification = (ImageView) view.findViewById(R.id.iv_notification_save);
+    notification.setOnClickListener(this);
     
-    if(marker.getTitle() != null) {
+    if (marker.getTitle() != null) {
       name.setText(marker.getTitle());
     }
     
     return view;
+  }
+  
+  @Override public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.iv_cancel_save:
+        marker.remove();
+        Animator.windowDown(MapsActivity.popupWindow);
+        MapsActivity.windowIsOpen = false;
+        break;
+      case R.id.iv_notification_save:
+        isNotify = true;
+        notification.getDrawable().setTint(
+            (isNotify) ? ContextCompat.getColor(view.getContext(), R.color.primary_accent)
+                       : ContextCompat.getColor(view.getContext(), R.color.black_54));
+        break;
+      default:
+        break;
+    }
   }
 }

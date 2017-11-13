@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -24,10 +23,8 @@ public class GeofenceTransitionIntentService extends IntentService {
   
   @Override
   protected void onHandleIntent(Intent intent) {
-    Log.e("-----------------------", "onHandleIntent");
     GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
     if (geofencingEvent.hasError()) {
-      Log.e("", "errors and stuff");
       return;
     }
     
@@ -36,14 +33,10 @@ public class GeofenceTransitionIntentService extends IntentService {
       List   triggeringGeofences       = geofencingEvent.getTriggeringGeofences();
       String geofenceTransitionDetails = "testing123";
       sendNotification(geofenceTransitionDetails);
-      Log.e("", geofenceTransitionDetails);
-    } else {
-      Log.e("", "errors and stuff");
     }
   }
   
   private void sendNotification(String stuff) {
-    Log.e("-----------------------", "sendNotification");
     NotificationManager notificationManager =
         (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
     Intent intent = new Intent(this, MapsActivity.class);

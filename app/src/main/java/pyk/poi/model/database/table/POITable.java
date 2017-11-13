@@ -3,7 +3,6 @@ package pyk.poi.model.database.table;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class POITable extends Table {
   
@@ -40,7 +39,7 @@ public class POITable extends Table {
       values.put(COLUMN_VIEWED, viewed ? 1 : 0);
       return this;
     }
-  
+    
     public Builder setNotify(boolean notify) {
       values.put(COLUMN_NOTIFY, notify ? 1 : 0);
       return this;
@@ -48,7 +47,6 @@ public class POITable extends Table {
     
     @Override
     public long insert(SQLiteDatabase writeableDB) {
-      Log.i("asdf","attempted to insert");
       return writeableDB.insert(NAME, null, values);
     }
     

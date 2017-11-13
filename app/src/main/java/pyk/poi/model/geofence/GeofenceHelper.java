@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
@@ -23,11 +22,9 @@ public class GeofenceHelper {
   
   public static void updateAllFences(GoogleApiClient apiClient, List<Geofence> geofenceList,
                                      PendingIntent pendingIntent, MapsActivity mapsActivity) {
-    Log.e("", "got here");
     if (ActivityCompat.checkSelfPermission(POIApplication.getContext(),
                                            Manifest.permission.ACCESS_FINE_LOCATION) !=
         PackageManager.PERMISSION_GRANTED) {
-      Log.e("-----------------------", "permission error");
       return;
     }
     
@@ -37,12 +34,10 @@ public class GeofenceHelper {
     // TODO: check for notify is true before adding to list, if not true then remove from list
     if (poiItemList != null && !poiItemList.isEmpty()) {
       for (int i = 0; i < poiItemList.size(); i++) {
-        //ArrayList<String> id = new ArrayList<>();
-        //id.add("" + poiItemList.get(i).getLat() + poiItemList.get(i).getLng());
-        //LocationServices.GeofencingApi.removeGeofences(apiClient, id);
-        GeofenceHelper.addFence(geofenceList, poiItemList.get(i));
+        if (poiItemList.get(i).isNotify()) {
+          GeofenceHelper.addFence(geofenceList, poiItemList.get(i));
+        }
       }
-      Log.e("", "got here");
       LocationServices.GeofencingApi.addGeofences(apiClient,
                                                   GeofenceHelper.getGeofencingRequest(geofenceList),
                                                   GeofenceHelper
@@ -72,11 +67,9 @@ public class GeofenceHelper {
   private static PendingIntent getGeofencePendingIntent(MapsActivity mapsActivity,
                                                         PendingIntent pendingIntent) {
     if (pendingIntent != null) {
-      Log.e("", "is null");
       return pendingIntent;
     }
     Intent intent = new Intent(mapsActivity, GeofenceTransitionIntentService.class);
-    //POIApplication.getContext().startService(intent);
     pendingIntent = PendingIntent.getService(POIApplication.getContext(), 0, intent, PendingIntent.
         FLAG_UPDATE_CURRENT);
     return pendingIntent;

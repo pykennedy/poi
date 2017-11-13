@@ -22,7 +22,8 @@
             android:layout_weight=".99"
             android:layout_margin="2dp"
             android:elevation="2dp"
-            android:text="Name..."
+            android:hint="Name..."
+            android:textColorHint="@color/black_12"
             android:inputType="text"/>
 
         <ImageView
@@ -77,7 +78,8 @@
         android:layout_below="@+id/ll_secondline_save"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:text="Description..."
+        android:hint="Description..."
+        android:textColorHint="@color/black_12"
         style="@style/Description"/>
 
 </RelativeLayout>
