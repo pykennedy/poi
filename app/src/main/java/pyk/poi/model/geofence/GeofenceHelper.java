@@ -38,6 +38,9 @@ public class GeofenceHelper {
           GeofenceHelper.addFence(geofenceList, poiItemList.get(i));
         }
       }
+      if(geofenceList.size() < 1) {
+        return;
+      }
       LocationServices.GeofencingApi.addGeofences(apiClient,
                                                   GeofenceHelper.getGeofencingRequest(geofenceList),
                                                   GeofenceHelper

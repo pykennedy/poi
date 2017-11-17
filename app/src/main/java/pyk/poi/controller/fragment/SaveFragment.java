@@ -40,10 +40,14 @@ public class SaveFragment extends Fragment
   }
   
   public void triggerSave(MapsActivity mapsActivity) {
+    String tempName        =
+        (name.getText().toString().equals("")) ? "[Blank]" : name.getText().toString();
+    String tempDescription =
+        (description.getText().toString().equals("")) ? "[Blank]" : description.getText().toString();
     marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
     POIItem poiItem = new POIItem(marker.getPosition().latitude, marker.getPosition().longitude,
-                                  name.getText().toString(), category.getSelectedItem().toString(),
-                                  description.getText().toString(), false, isNotify);
+                                  tempName, category.getSelectedItem().toString(),
+                                  tempDescription, false, isNotify);
     dataSource.savePOI(poiItem);
     GeofenceHelper.updateAllFences(MapsActivity.apiClient, MapsActivity.geofenceList,
                                    MapsActivity.pendingIntent, mapsActivity);
