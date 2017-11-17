@@ -32,7 +32,7 @@
         -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDufHKyc1vaKw2vdV2QtguN_-vUkjfr1i4"/>
+            android:value="${mapApiKeyValue}"/>
 
         <activity
             android:name=".controller.activity.MapsActivity"

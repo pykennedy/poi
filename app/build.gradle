@@ -7,15 +7,19 @@ android {
         applicationId "pyk.poi"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 2
-        versionName "2.0"
+        versionCode 4
+        versionName "4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
+        debug {
+            manifestPlaceholders = [ mapApiKeyValue:"AIzaSyDufHKyc1vaKw2vdV2QtguN_-vUkjfr1i4"]
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [ mapApiKeyValue:"AIzaSyCGVBI8xYzUwer1XvbhC5t1MVUaozNs62A"]
         }
     }
     packagingOptions {
